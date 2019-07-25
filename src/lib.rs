@@ -33,10 +33,11 @@ impl Config {
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 	let contents = fs::read_to_string(&config.filename)?;
 
+	// 【坑】要返回值的化里面的语句不能加分号
 	let results = if config.case_sensitive {
-		search(&config.query, &contents);
+		search(&config.query, &contents)
 	} else {
-		search_case_insensitive(&config.query, &contents);
+		search_case_insensitive(&config.query, &contents)
 	};
 
 	for line in results {
@@ -47,13 +48,13 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 
 fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-	let mut lines = Vec::new();
+	let mut results = Vec::new();
 	for line in contents.lines() {
 		if line.contains(query) {
-			lines.push(line);
+			results.push(line);
 		}
 	}
-	return lines;
+	return results;
 }
 
 fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
@@ -65,7 +66,7 @@ fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 			results.push(line);
 		}
 	}
-	return results
+	return results;
 }
 
 
