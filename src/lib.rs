@@ -1,6 +1,7 @@
 use std::error::Error;
 use std::fs;
 use std::env;
+use std::env::Args;
 
 pub struct Config {
 	pub case_sensitive: bool,
@@ -9,21 +10,22 @@ pub struct Config {
 }
 
 impl Config {
-	pub fn new(args: &Vec<String>) -> Result<Config, &'static str> {
+	pub fn new(mut args: Args) -> Result<Config, &'static str> {
 
-		// 在match里的return返回的是函数返回值而不是匹配结果
-		match args.len() {
-			1 => {
-				return Err("啥参数都没有你想干啥");
-			}
-			2 => {
-				return Err("还缺个文件路径参数哦");
-			}
-			_ => (), // match 必须穷尽，也就是得写这个蛋疼玩意
+		// 参数第一个值是该进程执行文件的路径，需要跳过
+		args.next();
+
+		// args.next 参数是 &mut self，故该方法参数要指定为 mut
+		let query = match args.next() {
+			Some(value) => value,
+			None => return Err("啥参数都没有你想干啥"),
 		};
 
-		let query = args[1].clone();
-		let filename = args[2].clone();
+		let filename = match args.next() {
+			Some(value) => value,
+			None => return Err("还缺个文件路径参数哦"),
+		};
+
 		let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
 		return Ok(Config { case_sensitive, query, filename });
@@ -48,27 +50,17 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 }
 
 fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-	let mut results = Vec::new();
-	for line in contents.lines() {
-		if line.contains(query) {
-			results.push(line);
-		}
-	}
-	return results;
+	return contents.lines()
+		.filter(|line| line.contains(query))
+		.collect();
 }
 
 fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
-	let query = query.to_lowercase();
-	let mut results = Vec::new();
-
-	for line in contents.lines() {
-		if line.to_lowercase().contains(&query) {
-			results.push(line);
-		}
-	}
-	return results;
+	let query = &query.to_lowercase();
+	return contents.lines()
+		.filter(|line| line.to_lowercase().contains(query))
+		.collect();
 }
-
 
 #[cfg(test)]
 mod tests {
