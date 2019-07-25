@@ -3,7 +3,11 @@ use rand::Rng;
 use std::cmp::Ordering;
 use std::error::Error;
 
-fn console_read_string() -> Result<i32, Box<dyn Error>> {
+/// 从控制台读取一行，并转换为整数。
+/// 文档注释的编写：
+/// https://doc.rust-lang.org/book/ch14-02-publishing-to-crates-io.html#making-useful-documentation-comments
+fn read_int() -> Result<i32, Box<dyn Error>> {
+
     // :: 叫关联函数，相当于其他语言里的静态方法
     let mut guess = String::new();
 
@@ -15,16 +19,16 @@ fn console_read_string() -> Result<i32, Box<dyn Error>> {
 }
 
 fn main() {
-    println!("Please input your guess.");
+    println!("Please input your guess:");
     let secret_number = rand::thread_rng().gen_range(1, 101);
 
     loop {
-        let guess = match console_read_string() {
-            Ok(value) => value,
+        let guess = match read_int() {
             Err(_) => {
                 println!("请输入数字!");
                 continue;
             }
+            Ok(value) => value,
         };
 
         match guess.cmp(&secret_number) {
