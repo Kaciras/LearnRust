@@ -6,6 +6,10 @@ path = "src/guess_number.rs"
 name = "minigrep"
 path = "src/minigrep.rs"
 
+[[bin]]
+name = "hello_server"
+path = "src/hello_server.rs"
+
 [package]
 name = "experiment"
 version = "0.1.0"
