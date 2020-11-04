@@ -1,3 +1,9 @@
+[package]
+name = "LearnRust"
+version = "0.1.0"
+authors = ["Kaciras <Kaciras@outlook.com>"]
+edition = "2018"
+
 [[bin]]
 name = "guess"
 path = "src/guess_number.rs"
@@ -9,12 +15,6 @@ path = "src/minigrep.rs"
 [[bin]]
 name = "hello_server"
 path = "src/hello_server.rs"
-
-[package]
-name = "experiment"
-version = "0.1.0"
-authors = ["Kaciras <Kaciras@outlook.com>"]
-edition = "2018"
 
 [dependencies]
 rand = "0.7"

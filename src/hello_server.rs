@@ -1,8 +1,8 @@
-mod thread_pool;
-
-use std::net::{TcpListener, TcpStream};
-use std::io::{Read, Write};
 use std::{fs, thread};
+use std::io::{Read, Write};
+use std::net::{TcpListener, TcpStream};
+
+mod thread_pool;
 
 fn main() {
 	let address = "127.0.0.1:7878";
@@ -13,6 +13,8 @@ fn main() {
 
 	for stream in listener.incoming() {
 		let stream = stream.unwrap();
+
+		// 这里 stream 的所有权已经被移入闭包内，外层不可再访问
 		pool.execute(|| { handle_connection(stream); });
 	}
 }

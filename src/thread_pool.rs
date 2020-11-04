@@ -1,5 +1,6 @@
+use std::sync::{Arc, mpsc, Mutex};
+// 本文件被 hello_server 所使用
 use std::thread;
-use std::sync::{mpsc, Arc, Mutex};
 
 type Job = Box<FnBox + Send + 'static>;
 
