@@ -1,7 +1,8 @@
-use std::io;
-use rand::Rng;
 use std::cmp::Ordering;
 use std::error::Error;
+use std::io;
+
+use rand::Rng;
 
 /// 从控制台读取一行，并转换为整数。
 /// 文档注释的编写：

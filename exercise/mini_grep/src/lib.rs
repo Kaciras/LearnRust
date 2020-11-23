@@ -1,7 +1,7 @@
-use std::error::Error;
-use std::fs;
 use std::env;
 use std::env::Args;
+use std::error::Error;
+use std::fs;
 
 pub struct Config {
 	pub case_sensitive: bool,
@@ -65,7 +65,7 @@ fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 		.collect();
 }
 
-// [cfg(test)] 标识这个模块只在test构建时编译
+// [cfg(test)] 标识这个模块只在 test 构建时编译
 #[cfg(test)]
 mod tests {
 	use super::*;
