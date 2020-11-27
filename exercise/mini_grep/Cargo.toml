@@ -3,3 +3,4 @@ name = "mini_grep"
 version = "0.1.0"
 authors = ["Kaciras <Kaciras@outlook.com>"]
 edition = "2018"
+homepage = "https://doc.rust-lang.org/book/ch12-00-an-io-project.html"
