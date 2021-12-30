@@ -1,2 +1,9 @@
 [workspace]
 members = ["exercise/*"]
+
+# 减少生成文件的体积，rust 编译出的结果怎么这么大……
+# UPX 极限压缩能减少约一半体积。
+# https://github.com/johnthagen/min-sized-rust
+[profile.release]
+lto = true          # 175KB -> 165KB
+panic = "abort"     # 165KB -> 148KB
