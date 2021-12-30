@@ -10,6 +10,7 @@ use rand::Rng;
 fn read_int() -> Result<i32, Box<dyn Error>> {
 
     // :: 叫关联函数，相当于其他语言里的静态方法
+    // 从源码看里面用了 Vec，应该是可变的，相当于 JAVA 里的 StringBuilder？
     let mut guess = String::new();
 
     // 这句把控制台读取到的字符串添加到guess的尾部
@@ -21,7 +22,7 @@ fn read_int() -> Result<i32, Box<dyn Error>> {
 
 fn main() {
     println!("Please input your guess:");
-    let secret_number = rand::thread_rng().gen_range(1, 101);
+    let secret_number = rand::thread_rng().gen_range(1..101);
 
     loop {
         let guess = match read_int() {
@@ -39,5 +40,5 @@ fn main() {
         }
     }
 
-    println!("You win !!!");
+    println!("卧槽你好牛逼，这都能猜到，You win !!!");
 }
