@@ -7,3 +7,12 @@ members = ["exercise/*"]
 [profile.release]
 lto = true          # 175KB -> 165KB
 panic = "abort"     # 165KB -> 148KB
+
+[package]
+name = "ks_debug"
+version = "0.1.0"
+authors = ["Kaciras <Kaciras@outlook.com>"]
+
+[[bin]]
+name = "debug"
+path = "main.rs"

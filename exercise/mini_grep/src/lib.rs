@@ -1,7 +1,7 @@
 use std::env;
 use std::env::Args;
-use std::error::Error;
 use std::fs;
+use std::io;
 
 pub struct Config {
 	pub case_sensitive: bool,
@@ -11,13 +11,13 @@ pub struct Config {
 
 impl Config {
 
-	/// 没有 &self 的方法相当于静态方法
+	/// 没有 &self 的方法相当于静态方法。
 	pub fn parse(mut args: Args) -> Result<Config, &'static str> {
 
 		// 参数第一个值是该进程执行文件的路径，需要跳过
 		args.next();
 
-		// args.next 参数是 &mut self，故该方法参数要指定为 mut
+		// Args 是个迭代器，调用 next() 会改变状态，所以要 mut。
 		let query = match args.next() {
 			Some(value) => value,
 			None => return Err("啥参数都没有你想干啥"),
@@ -28,17 +28,18 @@ impl Config {
 			None => return Err("还缺个文件路径参数哦"),
 		};
 
-		// 获取环境变量的值，如果不存在则返回 Err
+		// var() 获取环境变量的值，如果不存在则返回 Err，再用 is_err() 转成 bool
 		let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
 
 		return Ok(Config { case_sensitive, query, filename });
 	}
 }
 
-pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+// 这各种包里头的错误咋都叫 Error 啊，重名多麻烦。
+pub fn run(config: Config) -> Result<(), io::Error> {
 	let contents = fs::read_to_string(&config.filename)?;
 
-	// 【坑】要返回值的化里面的语句不能加分号
+	// 【坑】要返回值的话里面的语句不能加分号，这么看 Rust 不能随心所欲地写啊。
 	let results = if config.case_sensitive {
 		search(&config.query, &contents)
 	} else {
@@ -49,7 +50,7 @@ pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
 		println!("{}", line);
 	}
 
-	Ok(()) // <- 恕我直言，这玩意真的巨TM丑
+	Ok(()) // <- 恕我直言，这玩意真的巨 TM 丑，就不能自动推断下吗？
 }
 
 fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
