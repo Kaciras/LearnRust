@@ -53,6 +53,10 @@ pub fn run(config: Config) -> Result<(), io::Error> {
 	Ok(()) // <- 恕我直言，这玩意真的巨 TM 丑，就不能自动推断下吗？
 }
 
+/*
+ * 返回引用类型和有引用参数的类型必须指定生命周期。
+ * contents.lines() 返回值有个 '_ 参数，所以也需要指明 contents 的生命周期。
+ */
 fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
 	return contents.lines()
 		.filter(|line| line.contains(query))

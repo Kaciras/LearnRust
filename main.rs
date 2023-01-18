@@ -1,13 +1,24 @@
-use std::collections::HashMap;
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
 
+// 例子 13-8，push(value) 改成 push(&value) 即可通过。
 fn main() {
-    let mut scores = HashMap::new();
-    let e = scores.entry(String::from("Yellow"));
+    let mut list = [
+        Rectangle { width: 10, height: 1 },
+        Rectangle { width: 3, height: 5 },
+        Rectangle { width: 7, height: 12 },
+    ];
 
-    for i in 0..200 {
-        scores.insert(i.to_string(), 10);
-    }
+    let mut sort_operations = vec![];
+    let value = String::from("by key called");
 
-    e.or_insert(999);
-    println!("{:?}", scores);
+    list.sort_by_key(|r| {
+        sort_operations.push(&value);
+        return r.width;
+    });
+    println!("{:#?}", list);
+    println!("{:#?}", sort_operations);
 }
