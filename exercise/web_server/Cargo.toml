@@ -2,5 +2,5 @@
 name = "web_server"
 version = "0.1.0"
 authors = ["Kaciras <Kaciras@outlook.com>"]
-edition = "2018"
+edition = "2021"
 homepage = "https://doc.rust-lang.org/book/ch20-00-final-project-a-web-server.html"

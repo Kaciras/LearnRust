@@ -2,7 +2,7 @@
 name = "guessing_game"
 version = "0.1.0"
 authors = ["Kaciras <Kaciras@outlook.com>"]
-edition = "2018"
+edition = "2021"
 homepage = "https://doc.rust-lang.org/book/ch02-00-guessing-game-tutorial.html"
 
 [dependencies]
