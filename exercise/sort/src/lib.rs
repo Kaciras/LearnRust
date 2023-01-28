@@ -1,4 +1,4 @@
-use rstest::rstest;
+use rstest::{fixture, rstest};
 use rstest_reuse::{self, *};
 
 mod insertion;
@@ -18,16 +18,24 @@ mod tests {
 
 	use super::*;
 
+	#[fixture]
+	fn rand_nums(#[default(10)] length: usize) -> Vec<u32> {
+		return rand::thread_rng()
+			.sample_iter(Uniform::from(0..1000))
+			.take(length).collect();
+	}
+
 	#[template]
 	#[rstest]
-	#[case(selection::sort)]
-	#[case(bubble::sort)]
+	#[case::selection(selection::sort)]
+	#[case::bubble(bubble::sort)]
 	fn algorithms(#[case] algorithm: SortFn) {}
 
 	#[apply(algorithms)]
 	fn empty(#[case] algorithm: SortFn) {
 		let mut array: [u32; 0] = [];
 		algorithm(&mut array);
+		assert!(array.is_empty());
 	}
 
 	#[apply(algorithms)]
@@ -38,21 +46,16 @@ mod tests {
 	}
 
 	#[apply(algorithms)]
-	fn odd(#[case] algorithm: SortFn) {
-		let range = Uniform::from(0..1000);
-		let mut array: Vec<u32> = rand::thread_rng().sample_iter(range).take(10).collect();
-
-		algorithm(array.as_mut_slice());
+	fn odd(#[case] algorithm: SortFn, #[with(10)] mut rand_nums: Vec<u32>) {
+		algorithm(rand_nums.as_mut_slice());
 		// println!("{:?}", array);
-		assert!(is_sorted(&array));
+		assert!(is_sorted(&rand_nums));
 	}
 
 	#[apply(algorithms)]
-	fn even(#[case] algorithm: SortFn) {
-		let range = Uniform::from(0..1000);
-		let mut array: Vec<u32> = rand::thread_rng().sample_iter(range).take(11).collect();
-		algorithm(array.as_mut_slice());
+	fn even(#[case] algorithm: SortFn, #[with(11)] mut rand_nums: Vec<u32>) {
+		algorithm(rand_nums.as_mut_slice());
 		// println!("{:?}", array);
-		assert!(is_sorted(&array));
+		assert!(is_sorted(&rand_nums));
 	}
 }
