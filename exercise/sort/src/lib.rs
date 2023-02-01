@@ -7,6 +7,7 @@ pub mod merge;
 pub mod selection;
 
 pub mod counting;
+pub mod radix;
 
 type SortFn = fn(&mut [u32]) -> ();
 
@@ -16,6 +17,14 @@ fn bound_counting(array: &mut [u32]) {
 	counting::sort(array, VALUE_RANGE)
 }
 
+fn bound_radix_grouping(array: &mut [u32]) {
+	radix::bucket(array, 4);
+}
+
+fn bound_radix_array(array: &mut [u32]) {
+	radix::double_array(array, 4);
+}
+
 #[cfg(test)]
 mod tests {
 	use rand::{distributions::Uniform, Rng};
@@ -23,7 +32,7 @@ mod tests {
 	use super::*;
 
 	#[fixture]
-	fn rand_nums(#[default(10)] length: usize) -> Vec<u32> {
+	fn nums(#[default(10)] length: usize) -> Vec<u32> {
 		return rand::thread_rng()
 			.sample_iter(Uniform::from(0..VALUE_RANGE))
 			.take(length).collect();
@@ -31,8 +40,10 @@ mod tests {
 
 	#[template]
 	#[rstest]
-	#[case::counting(bound_counting)]
-
+	// #[case::counting(bound_counting)]
+	#[case::RadixDoubleArray(bound_radix_array)]
+	// #[case::RadixGroup(bound_radix_grouping)]
+	// #[case::heap(heap::sort)]
 	// #[case::insertion(insertion::sort)]
 	// #[case::selection(selection::sort)]
 	// #[case::merge(merge::sort)]
