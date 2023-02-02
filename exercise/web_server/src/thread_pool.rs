@@ -2,7 +2,7 @@ use std::sync::{Arc, mpsc, Mutex};
 // 本文件被 hello_server 所使用
 use std::thread;
 
-type Job = Box<FnBox + Send + 'static>;
+type Job = Box<dyn FnBox + Send + 'static>;
 
 pub struct ThreadPool {
 	threads: Vec<Worker>,

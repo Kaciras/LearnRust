@@ -1,24 +1,12 @@
-#[derive(Debug)]
-struct Rectangle {
-    width: u32,
-    height: u32,
-}
-
-// 例子 13-8，push(value) 改成 push(&value) 即可通过。
 fn main() {
-    let mut list = [
-        Rectangle { width: 10, height: 1 },
-        Rectangle { width: 3, height: 5 },
-        Rectangle { width: 7, height: 12 },
-    ];
+    let mut a = vec![5556, 554];
+    println!("{:?}", a);
 
-    let mut sort_operations = vec![];
-    let value = String::from("by key called");
-
-    list.sort_by_key(|r| {
-        sort_operations.push(&value);
-        return r.width;
-    });
-    println!("{:#?}", list);
-    println!("{:#?}", sort_operations);
+    for i in 0..666 + a.len() {
+        a[0] = i;
+    }
+    for i in (0..666 + a.len()).rev() {
+        a[0] = i;
+    }
+    println!("{:?}", a);
 }

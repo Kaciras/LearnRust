@@ -10,20 +10,20 @@ pub mod selection;
 pub mod counting;
 pub mod radix;
 
-type SortFn = fn(&mut [u32]) -> ();
+pub type SortFn = fn(&mut [u32]) -> ();
 
 const VALUE_RANGE: u32 = 1000;
 
-fn bound_counting(array: &mut [u32]) {
+pub fn bound_counting(array: &mut [u32]) {
 	counting::sort(array, VALUE_RANGE)
 }
 
-fn bound_radix_grouping(array: &mut [u32]) {
+pub fn bound_radix_grouping(array: &mut [u32]) {
 	radix::bucket(array, 4);
 }
 
-fn bound_radix_array(array: &mut [u32]) {
-	radix::double_array(array, 4);
+pub fn bound_radix_array(array: &mut [u32]) {
+	radix::counting(array, 4);
 }
 
 #[cfg(test)]

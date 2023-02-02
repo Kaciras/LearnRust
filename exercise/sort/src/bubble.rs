@@ -1,4 +1,5 @@
 /// 冒泡排序，
+/// 由于大量的交换，导致该算法速度很慢。
 pub fn sort<T: PartialOrd>(array: &mut [T]) {
 
 	// 正向遍历
