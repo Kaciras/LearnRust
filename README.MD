@@ -1,8 +1,11 @@
-# 慢慢学 Rust
+# 目录结构
 
-* 编写猜猜看游戏
-* I/O 项目：构建命令行程序
-* 最后项目: 构建多线程 Web Server
+* `/algorithm` 算法练习：
 
-从这三个项目可以看出，Rust 现在还不够成熟，特别是第三个项目里就有俩明坑。
-等到 Rust2.0 发布了在学吧。
+    * `/sort` 常见的排序算法实现。
+
+* `/book` 《The Rust Programming Language》上的练习：
+
+  * `/guessing_game` [Programming a Guessing Game](https://doc.rust-lang.org/book/ch02-00-guessing-game-tutorial.html)
+  * `/mini_grep` [An I/O Project: Building a Command Line Program](https://doc.rust-lang.org/book/ch12-00-an-io-project.html)
+  * `/guessing_game` [Final Project: Building a Multithreaded Web Server](https://doc.rust-lang.org/book/ch20-00-final-project-a-web-server.html)

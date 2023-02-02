@@ -1,5 +1,5 @@
 [workspace]
-members = ["exercise/*"]
+members = ["book/*", "algorithm/*"]
 
 # 减少生成文件的体积，rust 编译出的结果怎么这么大……
 # UPX 极限压缩能减少约一半体积。
@@ -9,10 +9,10 @@ lto = true          # 175KB -> 165KB
 panic = "abort"     # 165KB -> 148KB
 
 [package]
-name = "ks_debug"
+name = "whiteboard"
 version = "0.1.0"
 authors = ["Kaciras <Kaciras@outlook.com>"]
 
 [[bin]]
-name = "debug"
+name = "whiteboard"
 path = "main.rs"
