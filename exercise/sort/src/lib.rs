@@ -3,6 +3,7 @@ use rstest_reuse::{self, *};
 
 pub mod insertion;
 pub mod bubble;
+pub mod heap;
 pub mod merge;
 pub mod selection;
 
@@ -40,14 +41,14 @@ mod tests {
 
 	#[template]
 	#[rstest]
-	// #[case::counting(bound_counting)]
-	#[case::RadixDoubleArray(bound_radix_array)]
-	// #[case::RadixGroup(bound_radix_grouping)]
-	// #[case::heap(heap::sort)]
-	// #[case::insertion(insertion::sort)]
-	// #[case::selection(selection::sort)]
-	// #[case::merge(merge::sort)]
-	// #[case::bubble(bubble::sort)]
+	#[case::counting(bound_counting)]
+	#[case::radix_counting(bound_radix_array)]
+	#[case::radix_group(bound_radix_grouping)]
+	#[case::heap(heap::sort)]
+	#[case::insertion(insertion::sort)]
+	#[case::selection(selection::sort)]
+	#[case::merge(merge::sort)]
+	#[case::bubble(bubble::sort)]
 	fn algorithms(#[case] algorithm: SortFn) {}
 
 	#[apply(algorithms)]
