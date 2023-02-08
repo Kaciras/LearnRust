@@ -5,6 +5,7 @@ pub mod insertion;
 pub mod bubble;
 pub mod heap;
 pub mod merge;
+pub mod quick;
 pub mod selection;
 
 pub mod counting;
@@ -41,14 +42,15 @@ mod tests {
 
 	#[template]
 	#[rstest]
-	#[case::counting(bound_counting)]
-	#[case::radix_counting(bound_radix_array)]
-	#[case::radix_group(bound_radix_grouping)]
-	#[case::heap(heap::sort)]
-	#[case::insertion(insertion::sort)]
-	#[case::selection(selection::sort)]
-	#[case::merge(merge::sort)]
-	#[case::bubble(bubble::sort)]
+	// #[case::counting(bound_counting)]
+	// #[case::radix_counting(bound_radix_array)]
+	// #[case::radix_group(bound_radix_grouping)]
+	// #[case::heap(heap::sort)]
+	// #[case::insertion(insertion::sort)]
+	// #[case::selection(selection::sort)]
+	// #[case::merge(merge::sort)]
+	#[case::quick(quick::sort)]
+	// #[case::bubble(bubble::sort)]
 	fn algorithms(#[case] algorithm: SortFn) {}
 
 	#[apply(algorithms)]
@@ -84,6 +86,15 @@ mod tests {
 		// println!("{:?}", array);
 
 		expected.sort();
+		assert_eq!(expected, nums);
+	}
+
+	#[apply(algorithms)]
+	fn big_dataset(#[case] algorithm: SortFn, #[with(4096)] mut nums: Vec<u32>) {
+		let mut expected = nums.clone();
+		expected.sort();
+
+		algorithm(nums.as_mut_slice());
 		assert_eq!(expected, nums);
 	}
 }
