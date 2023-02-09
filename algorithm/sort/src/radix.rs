@@ -1,8 +1,17 @@
+use std::cmp::Ordering;
 use std::mem::swap;
+
+/*
+ * 基数排序，
+ */
+
+fn mask_low(bits: u32) -> u32 {
+	return (0..bits).fold(0u32, |acc, _| (acc << 1) + 1);
+}
 
 /// 分桶基数排序，是最直接的实现方案。
 pub fn bucket(array: &mut [u32], bits: u32) {
-	let mask = (0..bits).fold(0u32, |acc, _| (acc << 1) + 1);
+	let mask = mask_low(bits);
 	for offset in (0..32).step_by(bits as usize) {
 		group_sort(array, mask, offset);
 	}
@@ -34,7 +43,7 @@ fn group_sort(array: &mut [u32], mask: u32, offset: u32) {
 ///
 /// 该算法使用的内存低于分桶，是更好的方案。
 pub fn counting(array: &mut [u32], bits: u32) {
-	let mask = (0..bits).fold(0u32, |acc, _| (acc << 1) + 1);
+	let mask = mask_low(bits);
 
 	/*
 	 * array 从外面传来的，其生命周期在调用方那，而 aux 仅到该函数结束。
@@ -87,5 +96,36 @@ fn sort_aux(array: &mut [u32], aux: &mut [u32], mask: u32, offset: u32) {
 
 /// 三路基数快排
 pub fn quick(array: &mut [u32], bits: u32) {
+	if array.len() < 2 {
+		return;
+	}
+	let mask = (0..4).fold(0u32, |acc, b| acc + (1 << 31 - bits - b));
 
+	let pivot = array[0] & mask;
+	let mut left = 1;
+	let mut right = array.len() - 1;
+	let mut mid = 0usize;
+
+	while left <= right {
+		let v = array[left] & mask;
+		match v.cmp(&pivot) {
+			Ordering::Less => {
+				array.swap(left, mid);
+				mid += 1;
+				left += 1;
+			}
+			Ordering::Greater => {
+				array.swap(right, left);
+				right -= 1;
+			}
+			Ordering::Equal => left += 1
+		}
+	}
+
+	quick(&mut array[..mid], bits);
+	quick(&mut array[right + 1..], bits);
+
+	if bits < u32::BITS - 4 {
+		quick(&mut array[mid..right + 1], bits + 4);
+	}
 }

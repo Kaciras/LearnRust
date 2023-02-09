@@ -27,6 +27,10 @@ pub fn bound_radix_array(array: &mut [u32]) {
 	radix::counting(array, 4);
 }
 
+pub fn bound_radix_quick(array: &mut [u32]) {
+	radix::quick(array, 0);
+}
+
 #[cfg(test)]
 mod tests {
 	use rand::{distributions::Uniform, Rng};
@@ -45,6 +49,7 @@ mod tests {
 	// #[case::counting(bound_counting)]
 	// #[case::radix_counting(bound_radix_array)]
 	// #[case::radix_group(bound_radix_grouping)]
+	#[case::radix_quick(bound_radix_quick)]
 	// #[case::heap(heap::sort)]
 	// #[case::insertion(insertion::sort)]
 	// #[case::shell(insertion::shell)]
@@ -53,7 +58,7 @@ mod tests {
 	// #[case::merge(merge::sort)]
 	// #[case::quick(quick::sort)]
 	// #[case::bubble(bubble::sort)]
-	#[case::comb(bubble::comb)]
+	// #[case::comb(bubble::comb)]
 	fn algorithms(#[case] algorithm: SortFn) {}
 
 	#[apply(algorithms)]
