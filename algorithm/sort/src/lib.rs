@@ -47,12 +47,13 @@ mod tests {
 	// #[case::radix_group(bound_radix_grouping)]
 	// #[case::heap(heap::sort)]
 	// #[case::insertion(insertion::sort)]
-	#[case::shell(insertion::shell)]
+	// #[case::shell(insertion::shell)]
 	// #[case::binary(insertion::binary)]
 	// #[case::selection(selection::sort)]
 	// #[case::merge(merge::sort)]
 	// #[case::quick(quick::sort)]
 	// #[case::bubble(bubble::sort)]
+	#[case::comb(bubble::comb)]
 	fn algorithms(#[case] algorithm: SortFn) {}
 
 	#[apply(algorithms)]
@@ -92,10 +93,14 @@ mod tests {
 	}
 
 	#[apply(algorithms)]
-	fn big_dataset(#[case] algorithm: SortFn, #[with(4096)] mut nums: Vec<u32>) {
+	fn big_dataset(#[case] algorithm: SortFn, #[with(2048)] mut nums: Vec<u32>) {
 		let mut expected = nums.clone();
-		expected.sort();
+		expected.sort_unstable();
 
+		algorithm(nums.as_mut_slice());
+		assert_eq!(expected, nums);
+
+		nums.reverse();
 		algorithm(nums.as_mut_slice());
 		assert_eq!(expected, nums);
 	}
