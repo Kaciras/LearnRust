@@ -47,9 +47,11 @@ mod tests {
 	// #[case::radix_group(bound_radix_grouping)]
 	// #[case::heap(heap::sort)]
 	// #[case::insertion(insertion::sort)]
+	#[case::shell(insertion::shell)]
+	// #[case::binary(insertion::binary)]
 	// #[case::selection(selection::sort)]
 	// #[case::merge(merge::sort)]
-	#[case::quick(quick::sort)]
+	// #[case::quick(quick::sort)]
 	// #[case::bubble(bubble::sort)]
 	fn algorithms(#[case] algorithm: SortFn) {}
 

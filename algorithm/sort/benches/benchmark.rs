@@ -7,15 +7,18 @@ use sort::{*};
 const DATA_SIZE: usize = 20_000;
 const VALUE_RANGE: u32 = 1000;
 
-const CASES: [(&str, SortFn); 8] = [
+const CASES: [(&str, SortFn); 11] = [
 	// O(n ** 2)
 	("Bubble", bubble::sort),
 	("Selection", selection::sort),
 	("Insertion", insertion::sort),
+	("Shell", insertion::shell),
+	("Binary", insertion::binary),
 
 	// O(n * log(2, n))
 	("Merge",  merge::sort),
 	("Heap",  heap::sort),
+	("Quick",  quick::sort),
 
 	// O(n * log(radix, n))
 	("RadixCounting",  bound_radix_array),
