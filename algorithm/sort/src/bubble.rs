@@ -1,11 +1,11 @@
-/// 冒泡排序，
-/// 由于大量的交换，导致该算法速度很慢。
-pub fn sort<T: PartialOrd>(array: &mut [T]) {
+/// 冒泡排序，一次比较两个元素，如果它们的顺序错误就把它们交换过来。
+/// 由于大量的交换，导致该算法速度通常很慢。
+pub fn sort<T: Ord>(array: &mut [T]) {
+	let length = array.len();
 
-	// 正向遍历
-	let end = array.len();
-	for i in 1..end {
-	    for j in 0..end - i {
+	// 每次冒泡能够将一个最值移到一端，故 N-1 次必能排完。
+	for i in 1..length {
+		for j in 0..length - i {
 
 	// let end = array.len() - 1;
 	// for i in 0..array.len() {
@@ -18,8 +18,7 @@ pub fn sort<T: PartialOrd>(array: &mut [T]) {
 }
 
 /// 梳排序，跟希尔排序类似，使用不同的步长来做冒泡，避免某些情况下出现大量交换。
-///
-pub fn comb<T: PartialOrd>(array: &mut [T]) {
+pub fn comb<T: Ord>(array: &mut [T]) {
 	let mut step = array.len();
 
 	// 另一种停止方法，一次遍历中未发现需要冒泡的即认为已经有序。

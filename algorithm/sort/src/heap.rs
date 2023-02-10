@@ -1,8 +1,8 @@
-struct BigHeap<'scope, T: PartialOrd> {
+struct BigHeap<'scope, T: Ord> {
 	array: &'scope mut [T],
 }
 
-impl<'scope, T: PartialOrd> BigHeap<'scope, T> {
+impl<'scope, T: Ord> BigHeap<'scope, T> {
 	fn popup(&mut self, index: usize) {
 		if index == 0 {
 			return;
@@ -29,7 +29,7 @@ impl<'scope, T: PartialOrd> BigHeap<'scope, T> {
 	}
 }
 
-pub fn sort<T: PartialOrd>(array: &mut [T]) {
+pub fn sort<T: Ord>(array: &mut [T]) {
 	let length = array.len();
 	let mut heap = BigHeap { array };
 	for i in 1..length {

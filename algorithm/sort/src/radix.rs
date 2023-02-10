@@ -94,38 +94,57 @@ fn sort_aux(array: &mut [u32], aux: &mut [u32], mask: u32, offset: u32) {
 	}
 }
 
-/// 三路基数快排
+/// 三路基数快排，是一种按基数从大到小的排序方法。对每次基数，都把数组划分为大于、等于和小于三部分，
+/// 不相等的继续划分，而相等的那段进展到下一个基数。
+///
+/// 该算法的优势是无需额外空间。
+///
+/// 三路划分在基于比较的快排中不是必要的，但基数排序必须这么做。
+///
 pub fn quick(array: &mut [u32], bits: u32) {
+	return partition(array, u32::MAX, bits);
+}
+
+fn partition(array: &mut [u32], mask: u32, bits: u32) {
 	if array.len() < 2 {
 		return;
 	}
-	let mask = (0..4).fold(0u32, |acc, b| acc + (1 << 31 - bits - b));
-
 	let pivot = array[0] & mask;
-	let mut left = 1;
-	let mut right = array.len() - 1;
-	let mut mid = 0usize;
 
+	let mut mid = 0usize;				// 相等段的起始
+	let mut left = 1;					// 相等段的结束 + 1
+	let mut right = array.len() - 1;	// 大于段的起始
+
+	// 因为待排段在相等段和大于段之间，所以两者交叉时划分结束。
 	while left <= right {
 		let v = array[left] & mask;
 		match v.cmp(&pivot) {
+			// 相当于把 v 插入到小于段的末尾。
 			Ordering::Less => {
-				array.swap(left, mid);
+				array.swap(mid, left);
 				mid += 1;
 				left += 1;
 			}
+			// 把 v 添加到大于段的开头。
 			Ordering::Greater => {
 				array.swap(right, left);
 				right -= 1;
 			}
+			// v 正处于相等段的末尾，无需交换。
 			Ordering::Equal => left += 1
 		}
 	}
 
-	quick(&mut array[..mid], bits);
-	quick(&mut array[right + 1..], bits);
+	/*
+	 * 【指针位置】
+	 *
+	 */
 
-	if bits < u32::BITS - 4 {
-		quick(&mut array[mid..right + 1], bits + 4);
+	partition(&mut array[..mid], mask,bits);
+	partition(&mut array[left..], mask,bits);
+
+	let mask = mask >> bits;
+	if mask != 0 {
+		partition(&mut array[mid..left], mask, bits);
 	}
 }

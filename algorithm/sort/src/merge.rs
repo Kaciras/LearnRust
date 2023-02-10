@@ -1,6 +1,6 @@
 /// 归并排序，将两半分别排序，然后合并，分半操作一直递归到两个元素以下。
 /// 该算法有稳定，简单，以及 Nlog2(N) 的性能，缺点是需要额外的内存。
-pub fn sort<T: PartialOrd + Copy + Default>(array: &mut [T]) {
+pub fn sort<T: Ord + Copy>(array: &mut [T]) {
 
 	// 辅助数组的在最坏的情况下必定要复制一次原始数组。因为每次归并都会交换俩数组,
 	// 所以循环实现可以在最后检查下，偶数次无需复制,递归无论如何都要复制。
@@ -10,7 +10,7 @@ pub fn sort<T: PartialOrd + Copy + Default>(array: &mut [T]) {
 	merge(aux.as_mut_slice(), array);
 }
 
-fn merge<T: PartialOrd + Copy + Default>(src: &mut [T], dest: &mut [T]) {
+fn merge<T: Ord + Copy>(src: &mut [T], dest: &mut [T]) {
 	let middle = src.len() >> 1;
 
 	if src.len() > 2 {

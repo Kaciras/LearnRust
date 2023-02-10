@@ -7,13 +7,17 @@ pub mod heap;
 pub mod merge;
 pub mod quick;
 pub mod selection;
-
 pub mod counting;
 pub mod radix;
+pub mod hybrid;
+
+/*
+ * Rust 1.67.0 标准库中 sort() 使用 TimSort，sort_unstable() 使用 Pattern-defeating quicksort。
+ */
 
 pub type SortFn = fn(&mut [u32]) -> ();
 
-const VALUE_RANGE: u32 = 1000;
+const VALUE_RANGE: u32 = 40_000;
 
 pub fn bound_counting(array: &mut [u32]) {
 	counting::sort(array, VALUE_RANGE)
@@ -28,7 +32,7 @@ pub fn bound_radix_array(array: &mut [u32]) {
 }
 
 pub fn bound_radix_quick(array: &mut [u32]) {
-	radix::quick(array, 0);
+	radix::quick(array, 4);
 }
 
 #[cfg(test)]
@@ -46,19 +50,19 @@ mod tests {
 
 	#[template]
 	#[rstest]
-	// #[case::counting(bound_counting)]
-	// #[case::radix_counting(bound_radix_array)]
-	// #[case::radix_group(bound_radix_grouping)]
+	#[case::counting(bound_counting)]
+	#[case::radix_counting(bound_radix_array)]
+	#[case::radix_group(bound_radix_grouping)]
 	#[case::radix_quick(bound_radix_quick)]
-	// #[case::heap(heap::sort)]
-	// #[case::insertion(insertion::sort)]
-	// #[case::shell(insertion::shell)]
-	// #[case::binary(insertion::binary)]
-	// #[case::selection(selection::sort)]
-	// #[case::merge(merge::sort)]
-	// #[case::quick(quick::sort)]
-	// #[case::bubble(bubble::sort)]
-	// #[case::comb(bubble::comb)]
+	#[case::heap(heap::sort)]
+	#[case::insertion(insertion::sort)]
+	#[case::shell(insertion::shell)]
+	#[case::binary(insertion::binary)]
+	#[case::selection(selection::sort)]
+	#[case::merge(merge::sort)]
+	#[case::quick(quick::sort)]
+	#[case::bubble(bubble::sort)]
+	#[case::comb(bubble::comb)]
 	fn algorithms(#[case] algorithm: SortFn) {}
 
 	#[apply(algorithms)]

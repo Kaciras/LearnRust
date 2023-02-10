@@ -1,4 +1,5 @@
-pub fn sort<T: PartialOrd + Copy>(array: &mut [T]) {
+/// 双指针快排，
+pub fn sort<T: Ord + Copy>(array: &mut [T]) {
 	if array.len() < 2 {
 		return;
 	}
