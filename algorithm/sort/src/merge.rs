@@ -11,33 +11,37 @@ pub fn sort<T: Ord + Copy>(array: &mut [T]) {
 }
 
 fn merge<T: Ord + Copy>(src: &mut [T], dest: &mut [T]) {
-	let middle = src.len() >> 1;
+	let length = src.len();
+	let middle = length >> 1;
 
-	if src.len() > 2 {
-		merge(&mut dest[..middle], &mut src[..middle]);
-		merge(&mut dest[middle..], &mut src[middle..]);
+	if length > 2 {
+		let (left_s, right_s) = src.split_at_mut(middle);
+		let (left_d, right_d) = dest.split_at_mut(middle);
+		merge(left_d, left_s);
+		merge(right_d, right_s);
 	}
 
 	// 长度为 0 和 1 时仍能通过合并，没必要做检查。
 
 	let mut left = 0;
-	let mut lm = 0;
-	let mut rm = middle;
+	let mut right = middle;
+	let mut i = 0;
 
-	while left < src.len() {
-		if lm == middle {
-			dest[left] = src[rm];
-			rm += 1;
-		} else if rm == src.len() {
-			dest[left] = src[lm];
-			lm += 1;
-		} else if src[lm] < src[rm] {
-			dest[left] = src[lm];
-			lm += 1;
+	// 一边到头就不用再比较了，直接复制另一边到 dest 即可。
+	while left < middle && right < length {
+		if src[left] < src[right] {
+			dest[i] = src[left];
+			left += 1;
 		} else {
-			dest[left] = src[rm];
-			rm += 1;
+			dest[i] = src[right];
+			right += 1;
 		}
-		left += 1;
+		i += 1;
+	}
+
+	if left == middle {
+		dest[i..].copy_from_slice(&mut src[right..]);
+	} else if right == length {
+		dest[i..].copy_from_slice(&mut src[left..middle]);
 	}
 }

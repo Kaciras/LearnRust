@@ -1,5 +1,6 @@
 /// 插入排序，遍历数组的每个元素，把前面更大的元素挨个后挪。
 /// 其结果就是让该元素插入到前面合适的位置，使前面的部分有序。
+#[inline]
 pub fn sort<T: Ord + Copy>(array: &mut [T]) {
 	insert(array, 1);
 }
@@ -22,18 +23,18 @@ pub fn shell<T: Ord + Copy>(array: &mut [T]) {
 	}
 }
 
-fn insert<T: Ord + Copy>(array: &mut [T], span: usize) {
-	// 在 span 跨度下，第一个元素已经算是有序的，所以从 1 * span 开始。
-	for i in span..array.len() {
+fn insert<T: Ord + Copy>(array: &mut [T], step: usize) {
+	// 在 step 跨度下，第一个元素已经算是有序的，所以从 1 * span 开始。
+	for i in step..array.len() {
 		let v = array[i];
 
 		// 注意 rev() 和 step_by() 的先后顺序不能搞错。
-		for k in (0..=i - span).rev().step_by(span) {
+		for k in (0..=i - step).rev().step_by(step) {
 			if v >= array[k] {
 				break;
 			}
 			// 当前元素跟前面的交换，相当于向前移动了。
-			(array[k + span], array[k]) = (array[k], v);
+			(array[k + step], array[k]) = (array[k], v);
 		}
 	}
 }

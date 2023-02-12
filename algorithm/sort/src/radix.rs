@@ -6,7 +6,11 @@ use std::mem::swap;
  */
 
 fn mask_low(bits: u32) -> u32 {
-	return (0..bits).fold(0u32, |acc, _| (acc << 1) + 1);
+	return (0..bits).fold(0u32, |mask, _| (mask << 1) | 1);
+}
+
+fn mask_high(bits: u32) -> u32 {
+	return (0..bits).fold(0u32, |mask, i| mask | 1 << (u32::BITS - i - 1));
 }
 
 /// 分桶基数排序，是最直接的实现方案。
@@ -97,23 +101,25 @@ fn sort_aux(array: &mut [u32], aux: &mut [u32], mask: u32, offset: u32) {
 /// 三路基数快排，是一种按基数从大到小的排序方法。对每次基数，都把数组划分为大于、等于和小于三部分，
 /// 不相等的继续划分，而相等的那段进展到下一个基数。
 ///
-/// 该算法的优势是无需额外空间。
+/// 该算法的优势是无需额外空间，性能在某些数据上比基于比较的快排更好。
+/// “某些数据”是指“整体比较”比“基数比较”慢的对象，比如字符串比较需要遍历，而比较单个字符则很快。
+/// 用于数字的话说该算法由于比较次数多反而更慢。
 ///
 /// 三路划分在基于比较的快排中不是必要的，但基数排序必须这么做。
-///
 pub fn quick(array: &mut [u32], bits: u32) {
-	return partition(array, u32::MAX, bits);
+	return partition(array, mask_high(bits), bits);
 }
 
 fn partition(array: &mut [u32], mask: u32, bits: u32) {
 	if array.len() < 2 {
 		return;
 	}
+	middle_3_with_mask(array, mask);
 	let pivot = array[0] & mask;
 
-	let mut mid = 0usize;				// 相等段的起始
-	let mut left = 1;					// 相等段的结束 + 1
-	let mut right = array.len() - 1;	// 大于段的起始
+	let mut mid = 0usize;            // 相等段的起始
+	let mut left = 1;                // 相等段的结束 + 1
+	let mut right = array.len() - 1; // 大于段的起始
 
 	// 因为待排段在相等段和大于段之间，所以两者交叉时划分结束。
 	while left <= right {
@@ -140,11 +146,24 @@ fn partition(array: &mut [u32], mask: u32, bits: u32) {
 	 *
 	 */
 
-	partition(&mut array[..mid], mask,bits);
-	partition(&mut array[left..], mask,bits);
+	partition(&mut array[..mid], mask, bits);
+	partition(&mut array[left..], mask, bits);
 
 	let mask = mask >> bits;
 	if mask != 0 {
 		partition(&mut array[mid..left], mask, bits);
 	}
+}
+
+#[inline]
+pub fn middle_3_with_mask(array: &mut [u32], mask: u32) {
+	let m = array.len() >> 1;
+	let e = array.len() - 1;
+	let b = array[m] & mask;
+
+	match (array[0] & mask < b, b < array[e] & mask) {
+		(false, true) => {},
+		(true, false) => array.swap(0, e),
+		_ => array.swap(0, m), // 正序和反序时中间的都是 m。
+	};
 }
