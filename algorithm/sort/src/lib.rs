@@ -63,6 +63,7 @@ mod tests {
 	#[case::quick(quick::sort)]
 	#[case::bubble(bubble::sort)]
 	#[case::comb(bubble::comb)]
+	#[case::quick_insert(hybrid::quick_insert)]
 	fn algorithms(#[case] algorithm: SortFn) {}
 
 	#[apply(algorithms)]
