@@ -20,7 +20,7 @@ pub type SortFn = fn(&mut [u32]) -> ();
 const VALUE_RANGE: u32 = 40_000;
 
 pub fn bound_counting(array: &mut [u32]) {
-	counting::sort(array, VALUE_RANGE)
+	counting::sort(array, 0x1000000)
 }
 
 pub fn bound_radix_grouping(array: &mut [u32]) {
