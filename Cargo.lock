@@ -360,10 +360,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ks_debug"
-version = "0.1.0"
-
-[[package]]
 name = "lazy_static"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -686,6 +682,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "simple"
+version = "0.1.0"
+dependencies = [
+ "futures",
+]
+
+[[package]]
 name = "slab"
 version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -820,6 +823,10 @@ dependencies = [
 
 [[package]]
 name = "web_server"
+version = "0.1.0"
+
+[[package]]
+name = "whiteboard"
 version = "0.1.0"
 
 [[package]]
